@@ -11,4 +11,6 @@ public interface Problem<S> {
     public S getInitState();
 
     public double goalCost();
+
+    public void printState(S State);
 }
