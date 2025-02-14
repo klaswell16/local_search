@@ -3,12 +3,12 @@ package problems;
 import java.util.Arrays;
 import java.util.Random;
 
-public class NQueens implements Problem<int[]> {
+public class NQueens implements Problem<int[]>{
     //# of queens
     private final int N;
 
     public NQueens(int n){
-        N=n;
+        N = n;
     }
 
     public int[] generateNewState(int[] current){
@@ -22,18 +22,17 @@ public class NQueens implements Problem<int[]> {
         int[] newState = Arrays.copyOf(current, current.length);
         newState[column] = newRow;
         return newState;
-
     }
 
     public double cost(int[] state){
         int conflicts = 0;
         for(int i=0; i<N-1; i++){
             for(int j=i+1; j<N; j++){
-                //checking row conflicts
+                //checking all the row conflicts
                 if(state[i] == state[j]){
                     conflicts++;
                 }
-                //checking diagonal conflicts
+                //check all the diagonal conflicts
                 if(Math.abs(state[i]-state[j]) == Math.abs(i-j)){
                     conflicts++;
                 }
@@ -59,13 +58,12 @@ public class NQueens implements Problem<int[]> {
         for(int row=0; row<N; row++){
             for(int col=0; col<N; col++){
                 if(state[col] == row){
-                    System.out.print("Q");
+                    System.out.print(" Q ");
                 }else{
-                    System.out.print(".");
+                    System.out.print(" . ");
                 }
             }
             System.out.println();
         }
-
     }
 }
