@@ -66,4 +66,7 @@ public class NQueens implements Problem<int[]>{
             System.out.println();
         }
     }
+    public int getN(){
+        return N;
+    }
 }

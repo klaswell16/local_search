@@ -99,7 +99,6 @@ public abstract class GeneticAlgorithm<G> {
                 bestGen = generation;
             }
         }
-
         System.out.println("best gen: "+bestGen);
         return population.get(0);
     }
