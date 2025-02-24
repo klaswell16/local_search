@@ -9,7 +9,7 @@ import static java.lang.System.exit;
 
 public class TSP implements Problem <int[]>{
 
-    private final int N;// Num of cities
+    private int N;
     private final Random rand;
 
     public record Sample(int[][] distanceMatrix) {
@@ -135,22 +135,28 @@ public class TSP implements Problem <int[]>{
     private final Sample MAP;
 
     public TSP(int size) {
+
         switch (size) {
             case 5:
                 this.MAP = Sample.SAMPLE_5;
+                this.N = 5;
                 break;
             case 6:
                 this.MAP = Sample.SAMPLE_6;
+                this.N = 6;
                 break;
             case 17:
                 this.MAP = Sample.SAMPLE_17;
+                this.N = 17;
                 break;
             case 26:
                 this.MAP = Sample.SAMPLE_26;
+                this.N = 26;
                 break;
             default:
                 //just to make Java happy
                 this.MAP = null;
+
                 System.out.println("Wrong map size; Choose from: 5, 6, 17, or 26.");
                 exit(1);
         }
@@ -160,14 +166,13 @@ public class TSP implements Problem <int[]>{
 
 
     public int[] generateNewState(int[] current){
-
-        int currentRow = current[column];
-        int newRow;
-        do{
-            newCity = nextInt(N);
-        }while(newRow==currentRow);
         int[] newState = Arrays.copyOf(current, current.length);
-        newState[column] = newRow;
+        int index1 = rand.nextInt(N);
+        int index2 = rand.nextInt(N);
+
+        int temp = newState[index1];
+        newState[index1] = newState[index2];
+        newState[index2] = temp;
         return newState;
     }
 
@@ -177,26 +182,19 @@ public class TSP implements Problem <int[]>{
 
     public double cost(int[] state) {
         double totalDistance = 0;
-        for (int i = 0; i < N - 1; i++){
-            totalDistance += MAP.distanceMatrix()[state[N -1]][state[i + 1]];
+        for (int i = 0; i < N; i++) {
+            totalDistance += state[i];
         }
-        totalDistance += MAP.distanceMatrix()[state[N -1]][state[0]];
         return totalDistance;
     }
 
 
     public int[] getInitState(){
-        Integer[] cities = new Integer[N];
-        for(int i = 0; i < N; i++){
-            cities[i] = i;
-        }
-        List<Integer> cityList = Arrays.asList(cities);
-
-
         int[] state = new int[N];
-        for(int i=0; i<N; i++){
-            state[i] = cityList.get(i);
+        for (int i = 0; i < N - 1; i++) {
+            state[i] = MAP.distanceMatrix()[i][i + 1];
         }
+        state[N - 1] = MAP.distanceMatrix()[N - 1][0];
         return state;
     }
 

@@ -55,6 +55,7 @@ public class NQueens implements Problem<int[]>{
     }
 
     public void printState(int[] state){
+        
         for(int row=0; row<N; row++){
             for(int col=0; col<N; col++){
                 if(state[col] == row){
