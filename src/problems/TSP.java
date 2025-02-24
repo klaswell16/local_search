@@ -1,16 +1,22 @@
 package problems;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import static java.lang.System.exit;
 
 public class TSP implements Problem <int[]>{
 
+    private final int N;// Num of cities
+    private final Random rand;
+
     public record Sample(int[][] distanceMatrix) {
         //In the distance matrix, the indices represents cities
         //e.g., distanceMatrix[1][4] specifies the distance between
         //city 1 and city 4.
+
         public static final Sample SAMPLE_5 = new Sample(
                 new int[][]{
                         {0, 3, 4, 2, 7},
@@ -148,12 +154,13 @@ public class TSP implements Problem <int[]>{
                 System.out.println("Wrong map size; Choose from: 5, 6, 17, or 26.");
                 exit(1);
         }
+        this.rand = new Random();
     }
 
 
 
     public int[] generateNewState(int[] current){
-        int column = nextInt(N);
+
         int currentRow = current[column];
         int newRow;
         do{
@@ -164,31 +171,37 @@ public class TSP implements Problem <int[]>{
         return newState;
     }
 
+    public double goalCost(){
+        return -1;
+    }
+
     public double cost(int[] state) {
-
-
+        double totalDistance = 0;
+        for (int i = 0; i < N - 1; i++){
+            totalDistance += MAP.distanceMatrix()[state[N -1]][state[i + 1]];
+        }
+        totalDistance += MAP.distanceMatrix()[state[N -1]][state[0]];
+        return totalDistance;
     }
 
 
     public int[] getInitState(){
-        Random rand = new Random();
+        Integer[] cities = new Integer[N];
+        for(int i = 0; i < N; i++){
+            cities[i] = i;
+        }
+        List<Integer> cityList = Arrays.asList(cities);
+
+
         int[] state = new int[N];
         for(int i=0; i<N; i++){
-            state[i] = rand.nextInt(N);
+            state[i] = cityList.get(i);
         }
         return state;
     }
 
     public void printState(int[] state){
-        for(int row=0; row<N; row++){
-            for(int col=0; col<N; col++){
-                if(state[col] == row){
-                    System.out.print(" Q ");
-                }else{
-                    System.out.print(" . ");
-                }
-            }
-            System.out.println();
-        }
+        System.out.println("tour: " + Arrays.toString(state));
+        System.out.println("total distance: "+ cost(state));
     }
 }
