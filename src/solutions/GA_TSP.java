@@ -21,8 +21,7 @@ public class GA_TSP extends GeneticAlgorithm<int[]> {
     }
 
     public Individual<int[]> reproduce(Individual<int[]> p, Individual<int[]> q) {
-        // Select a random portion of parent1's chromosome by
-        // randomly generating the start & the end positions.
+
         Random r = new Random();
         int startPos = r.nextInt(p.getChromosome().length);
         int endPos = r.nextInt(p.getChromosome().length);
@@ -32,9 +31,9 @@ public class GA_TSP extends GeneticAlgorithm<int[]> {
             startPos = endPos;
             endPos = t;
         }
-        //First, copy the entire parent 1 chromosome to child.
+
         int[] childChromosome = Arrays.copyOf(p.getChromosome(), p.getChromosome().length);
-        //Next, copy those genes before startPos and after endPos from parent 2 chromosome to child.
+
         for (int i = 0; i < startPos; i++) {
             childChromosome[i] = q.getChromosome()[i];
         }
