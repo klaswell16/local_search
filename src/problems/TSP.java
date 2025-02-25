@@ -9,6 +9,8 @@ import static java.lang.System.exit;
 
 public class TSP implements Problem <int[]>{
 
+
+
     private int N;
     private final Random rand;
 
@@ -201,5 +203,9 @@ public class TSP implements Problem <int[]>{
     public void printState(int[] state){
         System.out.println("tour: " + Arrays.toString(state));
         System.out.println("total distance: "+ cost(state));
+    }
+
+    public int getN(){
+        return N;
     }
 }
