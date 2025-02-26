@@ -170,14 +170,12 @@ public class TSP implements Problem <int[]>{
     public int[] generateNewState(int[] current) {
         int[] newState = Arrays.copyOf(current, current.length);
 
-        // Select two distinct indices to swap
         int index1 = rand.nextInt(N);
         int index2;
         do {
             index2 = rand.nextInt(N);
         } while (index1 == index2);
 
-        // Swap the cities at index1 and index2
         int temp = newState[index1];
         newState[index1] = newState[index2];
         newState[index2] = temp;
@@ -192,14 +190,12 @@ public class TSP implements Problem <int[]>{
     public double cost(int[] state) {
         double totalDistance = 0;
 
-        // Calculate the total distance of the tour
         for (int i = 0; i < N - 1; i++) {
             int city1 = state[i];
             int city2 = state[i + 1];
             totalDistance += MAP.distanceMatrix()[city1][city2];
         }
 
-        // Return to the starting city
         totalDistance += MAP.distanceMatrix()[state[N - 1]][state[0]];
 
         return totalDistance;
@@ -207,13 +203,11 @@ public class TSP implements Problem <int[]>{
 
 
     public int[] getInitState() {
-        // Generate a random permutation of cities
         int[] state = new int[N];
         for (int i = 0; i < N; i++) {
             state[i] = i;
         }
 
-        // Shuffle the array to create a random initial tour
         for (int i = 0; i < N; i++) {
             int j = rand.nextInt(N);
             int temp = state[i];

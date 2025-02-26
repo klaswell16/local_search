@@ -7,7 +7,6 @@ import core_algorithms.Individual;
 import problems.TSP;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -30,16 +29,14 @@ public class GA_TSP extends GeneticAlgorithm<int[]> {
         int startPos = rand.nextInt(parent1.length);
         int endPos = rand.nextInt(parent1.length - startPos) + startPos;
 
-        // Copy a segment from parent1 to the child
         for (int i = startPos; i <= endPos; i++) {
             child[i] = parent1[i];
         }
 
-        // Fill the remaining positions with genes from parent2, preserving order
         int index = 0;
         for (int i = 0; i < parent2.length; i++) {
             if (index == startPos) {
-                index = endPos + 1; // Skip the segment already copied from parent1
+                index = endPos + 1;
             }
             if (!contains(child, parent2[i])) {
                 child[index++] = parent2[i];
@@ -63,14 +60,14 @@ public class GA_TSP extends GeneticAlgorithm<int[]> {
         int[] chromosome = indiv.getChromosome().clone();
 
         Random rand = new Random();
-        if (rand.nextDouble() <= getMutationRate()) { // Apply mutation rate
+        if (rand.nextDouble() <= getMutationRate()) {
             int index1 = rand.nextInt(chromosome.length);
             int index2;
             do {
                 index2 = rand.nextInt(chromosome.length);
             } while (index1 == index2);
 
-            // Swap two cities
+
             int temp = chromosome[index1];
             chromosome[index1] = chromosome[index2];
             chromosome[index2] = temp;
@@ -97,7 +94,7 @@ public class GA_TSP extends GeneticAlgorithm<int[]> {
         double MUTATION_RATE = 0.1;
         int POPULATION_SIZE = 100;
         double ELITISM = 0.2;
-        int SIZE = 17;
+        int SIZE = 26;
 
         TSP problem = new TSP(SIZE);
         GA_TSP agent =

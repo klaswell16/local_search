@@ -93,7 +93,6 @@ public abstract class GeneticAlgorithm<G> {
             }
             population = newPopulation;
             Collections.sort(population);
-            //keep track of the best solution so far
             if (population.get(0).getFitnessScore() > best.getFitnessScore()){
                 best = population.get(0);
                 bestGen = generation;
@@ -101,6 +100,10 @@ public abstract class GeneticAlgorithm<G> {
         }
         System.out.println("best gen: "+bestGen);
         return population.get(0);
+    }
+
+    public double getMutationRate(){
+        return MUTATION;
     }
 
 }

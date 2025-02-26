@@ -64,7 +64,7 @@ public class GA_NQueens extends GeneticAlgorithm<int[]> {
         double MUTATION_RATE = 0.1;
         int POPULATION_SIZE = 5000;
         double ELITISM = 0.2;
-        int SIZE = 32; //number of queens
+        int SIZE = 32;
 
         NQueens problem = new NQueens(SIZE);
         GA_NQueens agent =
