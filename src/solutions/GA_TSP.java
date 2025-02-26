@@ -20,36 +20,67 @@ public class GA_TSP extends GeneticAlgorithm<int[]> {
         this.problem = problem;
     }
 
+
     public Individual<int[]> reproduce(Individual<int[]> p, Individual<int[]> q) {
+        int[] parent1 = p.getChromosome();
+        int[] parent2 = q.getChromosome();
+        int[] child = new int[parent1.length];
 
-        Random r = new Random();
-        int startPos = r.nextInt(p.getChromosome().length);
-        int endPos = r.nextInt(p.getChromosome().length);
-        //If startPos is greater than endPos, swap them.
-        if (startPos > endPos) {
-            int t = startPos;
-            startPos = endPos;
-            endPos = t;
+        Random rand = new Random();
+        int startPos = rand.nextInt(parent1.length);
+        int endPos = rand.nextInt(parent1.length - startPos) + startPos;
+
+        // Copy a segment from parent1 to the child
+        for (int i = startPos; i <= endPos; i++) {
+            child[i] = parent1[i];
         }
 
-        int[] childChromosome = Arrays.copyOf(p.getChromosome(), p.getChromosome().length);
+        // Fill the remaining positions with genes from parent2, preserving order
+        int index = 0;
+        for (int i = 0; i < parent2.length; i++) {
+            if (index == startPos) {
+                index = endPos + 1; // Skip the segment already copied from parent1
+            }
+            if (!contains(child, parent2[i])) {
+                child[index++] = parent2[i];
+            }
+        }
 
-        for (int i = 0; i < startPos; i++) {
-            childChromosome[i] = q.getChromosome()[i];
-        }
-        for (int i = endPos + 1; i<q.getChromosome().length; i++) {
-            childChromosome[i] = q.getChromosome()[i];
-        }
-        return new Individual<>(childChromosome, calcFitnessScore(childChromosome));
+        return new Individual<>(child, calcFitnessScore(child));
     }
 
-    public Individual<int[]> mutate(Individual<int[]> indiv){
-        int[] chromosome = problem.generateNewState(indiv.getChromosome());
+    private boolean contains(int[] array, int value) {
+        for (int i : array) {
+            if (i == value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Individual<int[]> mutate(Individual<int[]> indiv) {
+        int[] chromosome = indiv.getChromosome().clone();
+
+        Random rand = new Random();
+        if (rand.nextDouble() <= getMutationRate()) { // Apply mutation rate
+            int index1 = rand.nextInt(chromosome.length);
+            int index2;
+            do {
+                index2 = rand.nextInt(chromosome.length);
+            } while (index1 == index2);
+
+            // Swap two cities
+            int temp = chromosome[index1];
+            chromosome[index1] = chromosome[index2];
+            chromosome[index2] = temp;
+        }
+
         return new Individual<>(chromosome, calcFitnessScore(chromosome));
     }
 
     public double calcFitnessScore(int[] chromosome){
-        return problem.getN()*(problem.getN()-1)/(double)2 - problem.cost(chromosome);
+        return 1/problem.cost(chromosome);
     }
 
     public List<Individual<int[]>> generateInitPopulation(int popSize){
@@ -64,7 +95,7 @@ public class GA_TSP extends GeneticAlgorithm<int[]> {
     public static void main(String[] args) {
         int MAX_GEN = 200;
         double MUTATION_RATE = 0.1;
-        int POPULATION_SIZE = 5000;
+        int POPULATION_SIZE = 100;
         double ELITISM = 0.2;
         int SIZE = 17;
 
@@ -77,4 +108,6 @@ public class GA_TSP extends GeneticAlgorithm<int[]> {
         problem.printState(best.getChromosome());
         System.out.println("Best cost is: "+problem.cost(best.getChromosome()));
     }
+
+
 }
